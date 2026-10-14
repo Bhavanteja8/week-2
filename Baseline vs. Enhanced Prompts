@@ -1,16 +1,17 @@
 from openai import OpenAI
- 
+
+# Replace "YOUR_API_KEY" with your actual OpenAI API key
 client = OpenAI(api_key="YOUR_API_KEY")
- 
+
 print("===== WEEK 2: BASELINE VS. ENHANCED PROMPTS =====")
- 
+
 baseline_prompt = "Explain Artificial Intelligence."
- 
+
 enhanced_prompt = """
 You are an expert AI teacher.
- 
+
 Explain Artificial Intelligence to a beginner engineering student.
- 
+
 Requirements:
 1. Use simple English.
 2. Give a clear definition.
@@ -18,20 +19,28 @@ Requirements:
 4. Explain in less than 150 words.
 5. End with a short summary.
 """
- 
+
 def get_response(prompt):
-    response = client.responses.create(
+    response = client.chat.completions.create(
         model="gpt-4o-mini",
-        input=prompt
+        messages=[
+            {"role": "user", "content": prompt}
+        ]
     )
-    return response.output_text
- 
+    return response.choices[0].message.content
+
 print("\n--- BASELINE PROMPT ---")
 print(baseline_prompt)
 print("\n--- BASELINE RESPONSE ---")
-print(get_response(baseline_prompt))
- 
+try:
+    print(get_response(baseline_prompt))
+except Exception as e:
+    print(f"Error: {e}")
+
 print("\n--- ENHANCED PROMPT ---")
 print(enhanced_prompt)
 print("\n--- ENHANCED RESPONSE ---")
-print(get_response(enhanced_prompt))
+try:
+    print(get_response(enhanced_prompt))
+except Exception as e:
+    print(f"Error: {e}")
